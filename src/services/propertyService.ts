@@ -1,62 +1,101 @@
 
 import { PropertyValueData } from "@/components/PropertyResult";
+import FirecrawlApp from '@mendable/firecrawl-js';
 
-// This is a mock service to simulate API calls to property websites
-// In a real implementation, this would connect to actual APIs or use web scraping techniques
+// Store the API key in localStorage temporarily
+const FIRECRAWL_API_KEY_STORAGE = 'firecrawl_api_key';
 
 export const getPropertyValuation = async (address: string): Promise<PropertyValueData> => {
-  // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 2000));
-  
-  // Generate random property data based on the address
-  // In a real implementation, this would fetch actual data from various sources
-  
-  // Use the address to create a deterministic but random-looking value
-  const hash = Array.from(address).reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  const baseValue = 500000 + (hash % 2000000);
-  
-  // Create variations for different sources
-  const domainEstimate = baseValue * (0.9 + Math.random() * 0.2);
-  const realEstateEstimate = baseValue * (0.85 + Math.random() * 0.3);
-  const propertyValueEstimate = baseValue * (0.95 + Math.random() * 0.1);
-  
-  // Calculate average
-  const avgValue = Math.round((domainEstimate + realEstateEstimate + propertyValueEstimate) / 3);
-  
-  // Extract suburb from address if possible
-  const addressParts = address.split(",");
-  let suburb = "";
-  if (addressParts.length > 1) {
-    const potentialSuburb = addressParts[1].trim().split(" ")[0];
-    suburb = potentialSuburb;
+  const apiKey = localStorage.getItem(FIRECRAWL_API_KEY_STORAGE);
+  if (!apiKey) {
+    throw new Error('Firecrawl API key not found. Please set it first.');
   }
-  
-  return {
-    address: address,
-    estimatedValue: avgValue,
-    bedrooms: 3 + (hash % 3),
-    bathrooms: 1 + (hash % 3),
-    parkingSpaces: hash % 3,
-    landSize: 300 + (hash % 500),
-    propertyType: hash % 3 === 0 ? "House" : hash % 3 === 1 ? "Apartment" : "Townhouse",
-    lastSoldPrice: avgValue * 0.8,
-    lastSoldDate: `${2018 + (hash % 5)}-${String(1 + (hash % 12)).padStart(2, '0')}-${String(1 + (hash % 28)).padStart(2, '0')}`,
-    sources: [
-      {
-        name: "Domain.com.au",
-        estimate: Math.round(domainEstimate),
-        url: "https://domain.com.au"
-      },
-      {
-        name: "Realestate.com.au",
-        estimate: Math.round(realEstateEstimate),
-        url: "https://realestate.com.au"
-      },
-      {
-        name: "PropertyValue.com.au",
-        estimate: Math.round(propertyValueEstimate),
-        url: "https://propertyvalue.com.au"
-      }
-    ]
-  };
+
+  const firecrawl = new FirecrawlApp({ apiKey });
+
+  try {
+    // Create the search URLs for each property website
+    const domainUrl = `https://www.domain.com.au/address/${encodeURIComponent(address)}`;
+    const realEstateUrl = `https://www.realestate.com.au/property/${encodeURIComponent(address)}`;
+    const propertyValueUrl = `https://www.propertyvalue.com.au/address/${encodeURIComponent(address)}`;
+
+    // Crawl all websites concurrently
+    const [domainData, realEstateData, propertyValueData] = await Promise.all([
+      firecrawl.crawlUrl(domainUrl),
+      firecrawl.crawlUrl(realEstateUrl),
+      firecrawl.crawlUrl(propertyValueUrl)
+    ]);
+
+    // Extract price information using regular expressions
+    const findPrice = (text: string): number | null => {
+      const priceMatch = text.match(/\$([0-9,]+)/);
+      return priceMatch ? parseInt(priceMatch[1].replace(/,/g, '')) : null;
+    };
+
+    // Extract prices from the crawled data
+    const domainPrice = findPrice(JSON.stringify(domainData)) || 0;
+    const realEstatePrice = findPrice(JSON.stringify(realEstateData)) || 0;
+    const propertyValuePrice = findPrice(JSON.stringify(propertyValueData)) || 0;
+
+    // Calculate average price (excluding zeros)
+    const validPrices = [domainPrice, realEstatePrice, propertyValuePrice].filter(price => price > 0);
+    const avgValue = validPrices.length > 0 
+      ? Math.round(validPrices.reduce((a, b) => a + b, 0) / validPrices.length)
+      : 0;
+
+    // Extract property details using regex patterns
+    const findBedrooms = (text: string): number => {
+      const match = text.match(/(\d+)\s*(?:bed|bedroom)/i);
+      return match ? parseInt(match[1]) : 0;
+    };
+
+    const findBathrooms = (text: string): number => {
+      const match = text.match(/(\d+)\s*(?:bath|bathroom)/i);
+      return match ? parseInt(match[1]) : 0;
+    };
+
+    const findParking = (text: string): number => {
+      const match = text.match(/(\d+)\s*(?:car|parking|garage)/i);
+      return match ? parseInt(match[1]) : 0;
+    };
+
+    const findLandSize = (text: string): number => {
+      const match = text.match(/(\d+)\s*(?:m²|sqm|square meters)/i);
+      return match ? parseInt(match[1]) : 0;
+    };
+
+    const allText = JSON.stringify([domainData, realEstateData, propertyValueData]);
+    
+    return {
+      address: address,
+      estimatedValue: avgValue,
+      bedrooms: findBedrooms(allText),
+      bathrooms: findBathrooms(allText),
+      parkingSpaces: findParking(allText),
+      landSize: findLandSize(allText),
+      propertyType: allText.toLowerCase().includes('apartment') ? 'Apartment' : 
+                   allText.toLowerCase().includes('townhouse') ? 'Townhouse' : 'House',
+      sources: [
+        {
+          name: "Domain.com.au",
+          estimate: domainPrice || undefined,
+          url: domainUrl
+        },
+        {
+          name: "Realestate.com.au",
+          estimate: realEstatePrice || undefined,
+          url: realEstateUrl
+        },
+        {
+          name: "PropertyValue.com.au",
+          estimate: propertyValuePrice || undefined,
+          url: propertyValueUrl
+        }
+      ]
+    };
+  } catch (error) {
+    console.error('Error crawling property data:', error);
+    throw new Error('Failed to fetch property data. Please try again.');
+  }
 };
+
