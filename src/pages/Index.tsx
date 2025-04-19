@@ -1,46 +1,15 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import AddressSearchForm from "@/components/AddressSearchForm";
 import PropertyResult, { PropertyValueData } from "@/components/PropertyResult";
 import { getPropertyValuation } from "@/services/propertyService";
 import { Building, DollarSign, Home, Search } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-
-const FIRECRAWL_API_KEY_STORAGE = 'firecrawl_api_key';
 
 const Index = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [propertyData, setPropertyData] = useState<PropertyValueData | null>(null);
-  const [apiKey, setApiKey] = useState('');
-  const [isApiKeySet, setIsApiKeySet] = useState(false);
   const { toast } = useToast();
-
-  useEffect(() => {
-    const savedApiKey = localStorage.getItem(FIRECRAWL_API_KEY_STORAGE);
-    if (savedApiKey) {
-      setIsApiKeySet(true);
-    }
-  }, []);
-
-  const handleApiKeySubmit = () => {
-    if (!apiKey.trim()) {
-      toast({
-        title: "Error",
-        description: "Please enter a valid API key",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    localStorage.setItem(FIRECRAWL_API_KEY_STORAGE, apiKey);
-    setIsApiKeySet(true);
-    toast({
-      title: "Success",
-      description: "API key saved successfully",
-    });
-  };
 
   const handleSearch = async (address: string) => {
     setIsSearching(true);
@@ -51,42 +20,13 @@ const Index = () => {
       console.error("Error fetching property data:", error);
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to retrieve property information. Please try again.",
+        description: "Failed to retrieve property information. Please try again.",
         variant: "destructive",
       });
     } finally {
       setIsSearching(false);
     }
   };
-
-  if (!isApiKeySet) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4">
-        <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
-          <h2 className="text-2xl font-bold text-aussie-blue mb-4">Enter Firecrawl API Key</h2>
-          <p className="text-slate-600 mb-4">
-            To use this application, you need to provide your Firecrawl API key.
-            You can get one from the Firecrawl website.
-          </p>
-          <div className="space-y-4">
-            <Input
-              type="password"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              placeholder="Enter your Firecrawl API key"
-              className="w-full"
-            />
-            <Button 
-              onClick={handleApiKeySubmit}
-              className="w-full bg-aussie-blue hover:bg-blue-900"
-            >
-              Save API Key
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -183,4 +123,3 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) =
 };
 
 export default Index;
-
