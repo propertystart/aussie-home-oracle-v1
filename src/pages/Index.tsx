@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import RbaRatesChart from "@/components/RbaRatesChart";
 import SupplyDemandChart from "@/components/SupplyDemandChart";
@@ -19,6 +18,12 @@ const Index = () => {
   const [showDemographicsChart, setShowDemographicsChart] = useState(false);
   const [showPriceChart, setShowPriceChart] = useState(false);
   const { toast } = useToast();
+
+  const [beds, setBeds] = useState("");
+  const [baths, setBaths] = useState("");
+  const [cars, setCars] = useState("");
+  const [floorArea, setFloorArea] = useState("");
+  const [landArea, setLandArea] = useState("");
 
   const validatePostcode = (postcode: string) => {
     return /^\d{4}$/.test(postcode);
@@ -153,6 +158,60 @@ const Index = () => {
                       className="flex-grow"
                       maxLength={4}
                     />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="number"
+                        placeholder="Beds"
+                        value={beds}
+                        onChange={(e) => setBeds(e.target.value)}
+                        min="0"
+                        className="flex-1"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="number"
+                        placeholder="Baths"
+                        value={baths}
+                        onChange={(e) => setBaths(e.target.value)}
+                        min="0"
+                        className="flex-1"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="number"
+                        placeholder="Cars"
+                        value={cars}
+                        onChange={(e) => setCars(e.target.value)}
+                        min="0"
+                        className="flex-1"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="number"
+                        placeholder="Floor Area (m²)"
+                        value={floorArea}
+                        onChange={(e) => setFloorArea(e.target.value)}
+                        min="0"
+                        className="flex-1"
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <Input
+                        type="number"
+                        placeholder="Land Area (m²)"
+                        value={landArea}
+                        onChange={(e) => setLandArea(e.target.value)}
+                        min="0"
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-end">
                     <Button type="submit">View Data</Button>
                   </div>
                 </form>
