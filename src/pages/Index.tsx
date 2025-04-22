@@ -8,6 +8,7 @@ import InflationChart from "@/components/InflationChart";
 import { Building, DollarSign, Home, Search } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getPropertyValuation } from "@/services/propertyService";
 
 const Index = () => {
   const [isSearching, setIsSearching] = useState(false);
