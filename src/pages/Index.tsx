@@ -1,9 +1,9 @@
-
 import React, { useState } from "react";
 import RbaRatesChart from "@/components/RbaRatesChart";
 import SupplyDemandChart from "@/components/SupplyDemandChart";
 import DemographicsChart from "@/components/DemographicsChart";
 import InflationChart from "@/components/InflationChart";
+import HousePriceChart from "@/components/HousePriceChart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -12,8 +12,10 @@ import { useToast } from "@/components/ui/use-toast";
 const Index = () => {
   const [supplyPostcode, setSupplyPostcode] = useState("");
   const [demographicsPostcode, setDemographicsPostcode] = useState("");
+  const [pricePostcode, setPricePostcode] = useState("");
   const [showSupplyChart, setShowSupplyChart] = useState(false);
   const [showDemographicsChart, setShowDemographicsChart] = useState(false);
+  const [showPriceChart, setShowPriceChart] = useState(false);
   const { toast } = useToast();
 
   const validatePostcode = (postcode: string) => {
@@ -46,9 +48,21 @@ const Index = () => {
     setShowDemographicsChart(true);
   };
 
+  const handlePriceSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validatePostcode(pricePostcode)) {
+      toast({
+        title: "Invalid Postcode",
+        description: "Please enter a valid 4-digit Australian postcode",
+        variant: "destructive",
+      });
+      return;
+    }
+    setShowPriceChart(true);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Hero Section */}
       <div className="hero-pattern py-16 px-4 md:py-24">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
@@ -63,15 +77,15 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Results Section */}
       <div className="flex-grow bg-white py-8 px-4">
         <div className="container mx-auto">
           <Tabs defaultValue="rba" className="w-full">
-            <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-4 gap-4 mb-8">
+            <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-5 gap-4 mb-8">
               <TabsTrigger value="rba">RBA Interest Rates</TabsTrigger>
               <TabsTrigger value="inflation">Inflation</TabsTrigger>
               <TabsTrigger value="supply">Supply & Demand</TabsTrigger>
               <TabsTrigger value="demographics">Demographics</TabsTrigger>
+              <TabsTrigger value="price">Average House Price</TabsTrigger>
             </TabsList>
             
             <TabsContent value="rba">
@@ -119,11 +133,29 @@ const Index = () => {
               </div>
               {showDemographicsChart && <DemographicsChart />}
             </TabsContent>
+
+            <TabsContent value="price">
+              <div className="max-w-md mx-auto mb-8">
+                <form onSubmit={handlePriceSubmit} className="space-y-4">
+                  <div className="flex gap-4">
+                    <Input
+                      type="text"
+                      placeholder="Enter postcode"
+                      value={pricePostcode}
+                      onChange={(e) => setPricePostcode(e.target.value)}
+                      className="flex-grow"
+                      maxLength={4}
+                    />
+                    <Button type="submit">View Data</Button>
+                  </div>
+                </form>
+              </div>
+              {showPriceChart && <HousePriceChart />}
+            </TabsContent>
           </Tabs>
         </div>
       </div>
 
-      {/* Footer */}
       <footer className="bg-aussie-blue text-white py-6">
         <div className="container mx-auto px-4 text-center">
           <p>© 2025 Aussie Home Oracle • Property valuations for informational purposes only</p>
