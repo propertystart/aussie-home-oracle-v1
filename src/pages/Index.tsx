@@ -4,7 +4,7 @@ import PropertyResult, { PropertyValueData } from "@/components/PropertyResult";
 import RbaRatesChart from "@/components/RbaRatesChart";
 import SupplyDemandChart from "@/components/SupplyDemandChart";
 import DemographicsChart from "@/components/DemographicsChart";
-import { getPropertyValuation } from "@/services/propertyService";
+import InflationChart from "@/components/InflationChart";
 import { Building, DollarSign, Home, Search } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -54,11 +54,12 @@ const Index = () => {
       <div className="flex-grow bg-white py-8 px-4">
         <div className="container mx-auto">
           <Tabs defaultValue="property" className="w-full">
-            <TabsList className="grid w-full max-w-md mx-auto grid-cols-4 mb-8">
+            <TabsList className="grid w-full max-w-md mx-auto grid-cols-5 mb-8">
               <TabsTrigger value="property">Property Valuation</TabsTrigger>
               <TabsTrigger value="rba">RBA Interest Rates</TabsTrigger>
               <TabsTrigger value="supply">Supply & Demand</TabsTrigger>
               <TabsTrigger value="demographics">Demographics</TabsTrigger>
+              <TabsTrigger value="inflation">Inflation</TabsTrigger>
             </TabsList>
             
             <TabsContent value="property">
@@ -112,6 +113,10 @@ const Index = () => {
 
             <TabsContent value="demographics">
               <DemographicsChart />
+            </TabsContent>
+
+            <TabsContent value="inflation">
+              <InflationChart />
             </TabsContent>
           </Tabs>
         </div>
