@@ -91,8 +91,8 @@ const Index = () => {
               <TabsTrigger value="rba" className="flex-1">RBA Interest Rates</TabsTrigger>
               <TabsTrigger value="growth" className="flex-1">Economic Growth</TabsTrigger>
               <TabsTrigger value="inflation" className="flex-1">Inflation</TabsTrigger>
-              <TabsTrigger value="supply" className="flex-1">Supply & Demand</TabsTrigger>
               <TabsTrigger value="demographics" className="flex-1">Demographics</TabsTrigger>
+              <TabsTrigger value="supply" className="flex-1">Supply & Demand</TabsTrigger>
               <TabsTrigger value="price" className="flex-1">Average House Price</TabsTrigger>
             </TabsList>
             
@@ -106,25 +106,6 @@ const Index = () => {
 
             <TabsContent value="inflation">
               <InflationChart />
-            </TabsContent>
-
-            <TabsContent value="supply">
-              <div className="max-w-md mx-auto mb-8">
-                <form onSubmit={handleSupplySubmit} className="space-y-4">
-                  <div className="flex gap-4">
-                    <Input
-                      type="text"
-                      placeholder="Enter postcode"
-                      value={supplyPostcode}
-                      onChange={(e) => setSupplyPostcode(e.target.value)}
-                      className="flex-grow"
-                      maxLength={4}
-                    />
-                    <Button type="submit">View Data</Button>
-                  </div>
-                </form>
-              </div>
-              {showSupplyChart && <SupplyDemandChart />}
             </TabsContent>
 
             <TabsContent value="demographics">
@@ -144,6 +125,25 @@ const Index = () => {
                 </form>
               </div>
               {showDemographicsChart && <DemographicsChart />}
+            </TabsContent>
+
+            <TabsContent value="supply">
+              <div className="max-w-md mx-auto mb-8">
+                <form onSubmit={handleSupplySubmit} className="space-y-4">
+                  <div className="flex gap-4">
+                    <Input
+                      type="text"
+                      placeholder="Enter postcode"
+                      value={supplyPostcode}
+                      onChange={(e) => setSupplyPostcode(e.target.value)}
+                      className="flex-grow"
+                      maxLength={4}
+                    />
+                    <Button type="submit">View Data</Button>
+                  </div>
+                </form>
+              </div>
+              {showSupplyChart && <SupplyDemandChart />}
             </TabsContent>
 
             <TabsContent value="price">
