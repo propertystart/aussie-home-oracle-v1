@@ -4,6 +4,7 @@ import SupplyDemandChart from "@/components/SupplyDemandChart";
 import DemographicsChart from "@/components/DemographicsChart";
 import InflationChart from "@/components/InflationChart";
 import HousePriceChart from "@/components/HousePriceChart";
+import EconomicGrowthChart from "@/components/EconomicGrowthChart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -80,8 +81,9 @@ const Index = () => {
       <div className="flex-grow bg-white py-8 px-4">
         <div className="container mx-auto">
           <Tabs defaultValue="rba" className="w-full">
-            <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-5 gap-4 mb-8">
+            <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-6 gap-4 mb-8">
               <TabsTrigger value="rba">RBA Interest Rates</TabsTrigger>
+              <TabsTrigger value="growth">Economic Growth</TabsTrigger>
               <TabsTrigger value="inflation">Inflation</TabsTrigger>
               <TabsTrigger value="supply">Supply & Demand</TabsTrigger>
               <TabsTrigger value="demographics">Demographics</TabsTrigger>
@@ -90,6 +92,10 @@ const Index = () => {
             
             <TabsContent value="rba">
               <RbaRatesChart />
+            </TabsContent>
+
+            <TabsContent value="growth">
+              <EconomicGrowthChart />
             </TabsContent>
 
             <TabsContent value="inflation">
