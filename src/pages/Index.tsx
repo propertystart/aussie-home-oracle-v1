@@ -25,6 +25,12 @@ const Index = () => {
   const [floorArea, setFloorArea] = useState("");
   const [landArea, setLandArea] = useState("");
 
+  const [supplyBeds, setSupplyBeds] = useState("");
+  const [supplyBaths, setSupplyBaths] = useState("");
+  const [supplyCars, setSupplyCars] = useState("");
+  const [supplyFloorArea, setSupplyFloorArea] = useState("");
+  const [supplyLandArea, setSupplyLandArea] = useState("");
+
   const validatePostcode = (postcode: string) => {
     return /^\d{4}$/.test(postcode);
   };
@@ -139,6 +145,60 @@ const Index = () => {
                       className="flex-grow"
                       maxLength={4}
                     />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="number"
+                        placeholder="Beds"
+                        value={supplyBeds}
+                        onChange={(e) => setSupplyBeds(e.target.value)}
+                        min="0"
+                        className="flex-1"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="number"
+                        placeholder="Baths"
+                        value={supplyBaths}
+                        onChange={(e) => setSupplyBaths(e.target.value)}
+                        min="0"
+                        className="flex-1"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="number"
+                        placeholder="Cars"
+                        value={supplyCars}
+                        onChange={(e) => setSupplyCars(e.target.value)}
+                        min="0"
+                        className="flex-1"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="number"
+                        placeholder="Floor Area (m²)"
+                        value={supplyFloorArea}
+                        onChange={(e) => setSupplyFloorArea(e.target.value)}
+                        min="0"
+                        className="flex-1"
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <Input
+                        type="number"
+                        placeholder="Land Area (m²)"
+                        value={supplyLandArea}
+                        onChange={(e) => setSupplyLandArea(e.target.value)}
+                        min="0"
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-end">
                     <Button type="submit">View Data</Button>
                   </div>
                 </form>
