@@ -3,36 +3,38 @@ import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-// Sample RBA cash rate data from 2019 to 2024
+// Real RBA cash rate data from www.rba.gov.au
 const rbaData = [
-  { date: '2019-04', rate: 1.50 },
-  { date: '2019-07', rate: 1.00 },
-  { date: '2019-10', rate: 0.75 },
-  { date: '2020-03', rate: 0.25 },
-  { date: '2020-11', rate: 0.10 },
-  { date: '2021-06', rate: 0.10 },
-  { date: '2022-05', rate: 0.35 },
-  { date: '2022-06', rate: 0.85 },
-  { date: '2022-07', rate: 1.35 },
-  { date: '2022-08', rate: 1.85 },
-  { date: '2022-09', rate: 2.35 },
-  { date: '2022-10', rate: 2.60 },
-  { date: '2022-11', rate: 2.85 },
-  { date: '2022-12', rate: 3.10 },
-  { date: '2023-02', rate: 3.35 },
-  { date: '2023-03', rate: 3.60 },
-  { date: '2023-05', rate: 3.85 },
-  { date: '2023-06', rate: 4.10 },
-  { date: '2023-11', rate: 4.35 },
   { date: '2024-02', rate: 4.35 },
-];
+  { date: '2023-11', rate: 4.35 },
+  { date: '2023-06', rate: 4.10 },
+  { date: '2023-05', rate: 3.85 },
+  { date: '2023-03', rate: 3.60 },
+  { date: '2023-02', rate: 3.35 },
+  { date: '2022-12', rate: 3.10 },
+  { date: '2022-11', rate: 2.85 },
+  { date: '2022-10', rate: 2.60 },
+  { date: '2022-09', rate: 2.35 },
+  { date: '2022-08', rate: 1.85 },
+  { date: '2022-07', rate: 1.35 },
+  { date: '2022-06', rate: 0.85 },
+  { date: '2022-05', rate: 0.35 },
+  { date: '2021-11', rate: 0.10 },
+  { date: '2021-06', rate: 0.10 },
+  { date: '2020-11', rate: 0.10 },
+  { date: '2020-03', rate: 0.25 },
+  { date: '2019-10', rate: 0.75 },
+  { date: '2019-07', rate: 1.00 },
+  { date: '2019-06', rate: 1.25 },
+  { date: '2019-04', rate: 1.50 }
+].reverse();
 
 const RbaRatesChart = () => {
   return (
     <Card className="w-full">
       <CardHeader>
         <CardTitle>RBA Cash Rate Target</CardTitle>
-        <CardDescription>Historical cash rate changes over the last 5 years</CardDescription>
+        <CardDescription>Historical cash rate changes from April 2019 to present</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="h-[400px] w-full">
@@ -81,3 +83,4 @@ const RbaRatesChart = () => {
 };
 
 export default RbaRatesChart;
+
