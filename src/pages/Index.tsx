@@ -1,10 +1,11 @@
-
 import React, { useState } from "react";
 import AddressSearchForm from "@/components/AddressSearchForm";
 import PropertyResult, { PropertyValueData } from "@/components/PropertyResult";
+import RbaRatesChart from "@/components/RbaRatesChart";
 import { getPropertyValuation } from "@/services/propertyService";
 import { Building, DollarSign, Home, Search } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Index = () => {
   const [isSearching, setIsSearching] = useState(false);
@@ -50,44 +51,57 @@ const Index = () => {
       {/* Results Section */}
       <div className="flex-grow bg-white py-8 px-4">
         <div className="container mx-auto">
-          {isSearching ? (
-            <div className="flex flex-col items-center justify-center py-12">
-              <div className="w-16 h-16 border-4 border-aussie-blue border-t-transparent rounded-full animate-spin mb-4"></div>
-              <p className="text-lg text-slate-600">Searching property databases...</p>
-            </div>
-          ) : propertyData ? (
-            <PropertyResult data={propertyData} />
-          ) : (
-            <div className="py-12 max-w-3xl mx-auto">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <FeatureCard
-                  icon={<Search className="h-8 w-8 text-aussie-blue" />}
-                  title="Comprehensive Search"
-                  description="Search any Australian residential property to get instant access to detailed valuation data."
-                />
-                <FeatureCard
-                  icon={<DollarSign className="h-8 w-8 text-aussie-blue" />}
-                  title="Accurate Valuations"
-                  description="Get accurate property valuations aggregated from Australia's leading real estate websites."
-                />
-                <FeatureCard
-                  icon={<Building className="h-8 w-8 text-aussie-blue" />}
-                  title="Property Insights"
-                  description="View detailed property information including size, features, and sales history."
-                />
-              </div>
-              
-              <div className="mt-12 text-center">
-                <div className="p-6 bg-slate-50 rounded-lg border border-slate-200">
-                  <Home className="h-12 w-12 text-aussie-gold mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">Enter an address above to get started</h3>
-                  <p className="text-slate-600">
-                    Provide a full Australian address including street, suburb, state, and postcode for the best results.
-                  </p>
+          <Tabs defaultValue="property" className="w-full">
+            <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-8">
+              <TabsTrigger value="property">Property Valuation</TabsTrigger>
+              <TabsTrigger value="rba">RBA Interest Rates</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="property">
+              {isSearching ? (
+                <div className="flex flex-col items-center justify-center py-12">
+                  <div className="w-16 h-16 border-4 border-aussie-blue border-t-transparent rounded-full animate-spin mb-4"></div>
+                  <p className="text-lg text-slate-600">Searching property databases...</p>
                 </div>
-              </div>
-            </div>
-          )}
+              ) : propertyData ? (
+                <PropertyResult data={propertyData} />
+              ) : (
+                <div className="py-12 max-w-3xl mx-auto">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <FeatureCard
+                      icon={<Search className="h-8 w-8 text-aussie-blue" />}
+                      title="Comprehensive Search"
+                      description="Search any Australian residential property to get instant access to detailed valuation data."
+                    />
+                    <FeatureCard
+                      icon={<DollarSign className="h-8 w-8 text-aussie-blue" />}
+                      title="Accurate Valuations"
+                      description="Get accurate property valuations aggregated from Australia's leading real estate websites."
+                    />
+                    <FeatureCard
+                      icon={<Building className="h-8 w-8 text-aussie-blue" />}
+                      title="Property Insights"
+                      description="View detailed property information including size, features, and sales history."
+                    />
+                  </div>
+                  
+                  <div className="mt-12 text-center">
+                    <div className="p-6 bg-slate-50 rounded-lg border border-slate-200">
+                      <Home className="h-12 w-12 text-aussie-gold mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold mb-2">Enter an address above to get started</h3>
+                      <p className="text-slate-600">
+                        Provide a full Australian address including street, suburb, state, and postcode for the best results.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </TabsContent>
+            
+            <TabsContent value="rba">
+              <RbaRatesChart />
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
 
