@@ -1,11 +1,51 @@
-import React from "react";
+
+import React, { useState } from "react";
 import RbaRatesChart from "@/components/RbaRatesChart";
 import SupplyDemandChart from "@/components/SupplyDemandChart";
 import DemographicsChart from "@/components/DemographicsChart";
 import InflationChart from "@/components/InflationChart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
+  const [supplyPostcode, setSupplyPostcode] = useState("");
+  const [demographicsPostcode, setDemographicsPostcode] = useState("");
+  const [showSupplyChart, setShowSupplyChart] = useState(false);
+  const [showDemographicsChart, setShowDemographicsChart] = useState(false);
+  const { toast } = useToast();
+
+  const validatePostcode = (postcode: string) => {
+    return /^\d{4}$/.test(postcode);
+  };
+
+  const handleSupplySubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validatePostcode(supplyPostcode)) {
+      toast({
+        title: "Invalid Postcode",
+        description: "Please enter a valid 4-digit Australian postcode",
+        variant: "destructive",
+      });
+      return;
+    }
+    setShowSupplyChart(true);
+  };
+
+  const handleDemographicsSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validatePostcode(demographicsPostcode)) {
+      toast({
+        title: "Invalid Postcode",
+        description: "Please enter a valid 4-digit Australian postcode",
+        variant: "destructive",
+      });
+      return;
+    }
+    setShowDemographicsChart(true);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Hero Section */}
@@ -29,25 +69,55 @@ const Index = () => {
           <Tabs defaultValue="rba" className="w-full">
             <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-4 gap-4 mb-8">
               <TabsTrigger value="rba">RBA Interest Rates</TabsTrigger>
+              <TabsTrigger value="inflation">Inflation</TabsTrigger>
               <TabsTrigger value="supply">Supply & Demand</TabsTrigger>
               <TabsTrigger value="demographics">Demographics</TabsTrigger>
-              <TabsTrigger value="inflation">Inflation</TabsTrigger>
             </TabsList>
             
             <TabsContent value="rba">
               <RbaRatesChart />
             </TabsContent>
 
+            <TabsContent value="inflation">
+              <InflationChart />
+            </TabsContent>
+
             <TabsContent value="supply">
-              <SupplyDemandChart />
+              <div className="max-w-md mx-auto mb-8">
+                <form onSubmit={handleSupplySubmit} className="space-y-4">
+                  <div className="flex gap-4">
+                    <Input
+                      type="text"
+                      placeholder="Enter postcode"
+                      value={supplyPostcode}
+                      onChange={(e) => setSupplyPostcode(e.target.value)}
+                      className="flex-grow"
+                      maxLength={4}
+                    />
+                    <Button type="submit">View Data</Button>
+                  </div>
+                </form>
+              </div>
+              {showSupplyChart && <SupplyDemandChart />}
             </TabsContent>
 
             <TabsContent value="demographics">
-              <DemographicsChart />
-            </TabsContent>
-
-            <TabsContent value="inflation">
-              <InflationChart />
+              <div className="max-w-md mx-auto mb-8">
+                <form onSubmit={handleDemographicsSubmit} className="space-y-4">
+                  <div className="flex gap-4">
+                    <Input
+                      type="text"
+                      placeholder="Enter postcode"
+                      value={demographicsPostcode}
+                      onChange={(e) => setDemographicsPostcode(e.target.value)}
+                      className="flex-grow"
+                      maxLength={4}
+                    />
+                    <Button type="submit">View Data</Button>
+                  </div>
+                </form>
+              </div>
+              {showDemographicsChart && <DemographicsChart />}
             </TabsContent>
           </Tabs>
         </div>
