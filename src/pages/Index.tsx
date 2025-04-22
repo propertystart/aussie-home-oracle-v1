@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import RbaRatesChart from "@/components/RbaRatesChart";
 import SupplyDemandChart from "@/components/SupplyDemandChart";
@@ -81,13 +82,13 @@ const Index = () => {
       <div className="flex-grow bg-white py-8 px-4">
         <div className="container mx-auto">
           <Tabs defaultValue="rba" className="w-full">
-            <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-6 gap-4 mb-8">
-              <TabsTrigger value="rba">RBA Interest Rates</TabsTrigger>
-              <TabsTrigger value="growth">Economic Growth</TabsTrigger>
-              <TabsTrigger value="inflation">Inflation</TabsTrigger>
-              <TabsTrigger value="supply">Supply & Demand</TabsTrigger>
-              <TabsTrigger value="demographics">Demographics</TabsTrigger>
-              <TabsTrigger value="price">Average House Price</TabsTrigger>
+            <TabsList className="grid w-full max-w-4xl mx-auto grid-cols-6 gap-4 mb-8">
+              <TabsTrigger value="rba" className="flex-1">RBA Interest Rates</TabsTrigger>
+              <TabsTrigger value="growth" className="flex-1">Economic Growth</TabsTrigger>
+              <TabsTrigger value="inflation" className="flex-1">Inflation</TabsTrigger>
+              <TabsTrigger value="supply" className="flex-1">Supply & Demand</TabsTrigger>
+              <TabsTrigger value="demographics" className="flex-1">Demographics</TabsTrigger>
+              <TabsTrigger value="price" className="flex-1">Average House Price</TabsTrigger>
             </TabsList>
             
             <TabsContent value="rba">
