@@ -65,10 +65,10 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="hero-pattern py-16 px-4 md:py-24">
+      <div className="hero-pattern py-6 px-4 md:py-8">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-aussie-blue mb-4">
+          <div className="text-center mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-aussie-blue mb-2">
               Aussie Home Oracle
             </h1>
             <p className="text-xl text-slate-600 max-w-2xl mx-auto">
@@ -79,7 +79,7 @@ const Index = () => {
         </div>
       </div>
 
-      <div className="flex-grow bg-white py-8 px-4">
+      <div className="flex-grow bg-white py-4 px-4">
         <div className="container mx-auto">
           <Tabs defaultValue="rba" className="w-full">
             <TabsList className="grid w-full max-w-4xl mx-auto grid-cols-6 gap-4 mb-8">
