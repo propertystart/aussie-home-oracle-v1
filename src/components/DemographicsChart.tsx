@@ -39,11 +39,14 @@ const DemographicsChart = () => {
                 textAnchor="middle"
               />
               <YAxis
-                tickFormatter={(value) => `${(value >= 0 ? '+' : '')}${value.toLocaleString()}`}
+                tickFormatter={(value) => `${(typeof value === 'number' && value >= 0 ? '+' : '')}${typeof value === 'number' ? value.toLocaleString() : value}`}
                 domain={['auto', 'auto']}
               />
               <Tooltip
-                formatter={(value) => [`${(value >= 0 ? '+' : '')}${value.toLocaleString()} people`, 'Net Population Change']}
+                formatter={(value) => {
+                  const numValue = Number(value);
+                  return [`${(!isNaN(numValue) && numValue >= 0 ? '+' : '')}${!isNaN(numValue) ? numValue.toLocaleString() : value} people`, 'Net Population Change'];
+                }}
                 labelFormatter={(label) => `Year: ${label}`}
               />
               <Line
@@ -62,4 +65,3 @@ const DemographicsChart = () => {
 };
 
 export default DemographicsChart;
-
