@@ -1,4 +1,3 @@
-
 import React from "react";
 import RbaRatesChart from "@/components/RbaRatesChart";
 import SupplyDemandChart from "@/components/SupplyDemandChart";
@@ -28,7 +27,7 @@ const Index = () => {
       <div className="flex-grow bg-white py-8 px-4">
         <div className="container mx-auto">
           <Tabs defaultValue="rba" className="w-full">
-            <TabsList className="grid w-full max-w-md mx-auto grid-cols-4 mb-8">
+            <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-4 gap-4 mb-8">
               <TabsTrigger value="rba">RBA Interest Rates</TabsTrigger>
               <TabsTrigger value="supply">Supply & Demand</TabsTrigger>
               <TabsTrigger value="demographics">Demographics</TabsTrigger>
@@ -68,4 +67,3 @@ const Index = () => {
 };
 
 export default Index;
-
