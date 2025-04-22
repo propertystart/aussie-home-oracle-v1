@@ -3,14 +3,14 @@ import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-// Sample data for projected population changes (2024-2029)
+// Sample data for projected population changes (April 2020 - April 2025)
 const populationData = [
-  { year: 2024, change: 2150 },
-  { year: 2025, change: 2340 },
-  { year: 2026, change: 2580 },
-  { year: 2027, change: 2420 },
-  { year: 2028, change: 2680 },
-  { year: 2029, change: 2890 },
+  { year: 2020, change: 1850 },
+  { year: 2021, change: 2150 },
+  { year: 2022, change: 2580 },
+  { year: 2023, change: 2780 },
+  { year: 2024, change: 2890 },
+  { year: 2025, change: 3050 },
 ];
 
 const DemographicsChart = () => {

@@ -1,15 +1,9 @@
-
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-// Sample inflation rate data (2019-2024)
+// Sample inflation rate data (April 2020 - April 2025)
 const inflationData = [
-  { date: '2019-Q1', rate: 1.3 },
-  { date: '2019-Q2', rate: 1.6 },
-  { date: '2019-Q3', rate: 1.7 },
-  { date: '2019-Q4', rate: 1.8 },
-  { date: '2020-Q1', rate: 2.2 },
   { date: '2020-Q2', rate: -0.3 },
   { date: '2020-Q3', rate: 0.7 },
   { date: '2020-Q4', rate: 0.9 },
@@ -26,6 +20,10 @@ const inflationData = [
   { date: '2023-Q3', rate: 5.4 },
   { date: '2023-Q4', rate: 4.1 },
   { date: '2024-Q1', rate: 3.4 },
+  { date: '2024-Q2', rate: 3.1 },
+  { date: '2024-Q3', rate: 2.8 },
+  { date: '2024-Q4', rate: 2.5 },
+  { date: '2025-Q1', rate: 2.3 },
 ];
 
 const InflationChart = () => {
@@ -83,4 +81,3 @@ const InflationChart = () => {
 };
 
 export default InflationChart;
-

@@ -3,28 +3,29 @@ import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-// Sample data for average days on market from 2019 to 2024
+// Sample data for average days on market from April 2020 to April 2025
 const marketData = [
-  { date: '2019-04', days: 45 },
-  { date: '2019-07', days: 48 },
-  { date: '2019-10', days: 42 },
-  { date: '2020-03', days: 55 },
-  { date: '2020-06', days: 62 },
-  { date: '2020-09', days: 58 },
-  { date: '2020-12', days: 52 },
-  { date: '2021-03', days: 38 },
-  { date: '2021-06', days: 32 },
-  { date: '2021-09', days: 28 },
-  { date: '2021-12', days: 25 },
-  { date: '2022-03', days: 22 },
-  { date: '2022-06', days: 24 },
-  { date: '2022-09', days: 29 },
-  { date: '2022-12', days: 35 },
-  { date: '2023-03', days: 42 },
-  { date: '2023-06', days: 48 },
-  { date: '2023-09', days: 52 },
-  { date: '2023-12', days: 49 },
-  { date: '2024-02', days: 45 },
+  { date: '2020-04', days: 62 },
+  { date: '2020-07', days: 58 },
+  { date: '2020-10', days: 52 },
+  { date: '2021-01', days: 45 },
+  { date: '2021-04', days: 38 },
+  { date: '2021-07', days: 32 },
+  { date: '2021-10', days: 28 },
+  { date: '2022-01', days: 25 },
+  { date: '2022-04', days: 22 },
+  { date: '2022-07', days: 24 },
+  { date: '2022-10', days: 29 },
+  { date: '2023-01', days: 35 },
+  { date: '2023-04', days: 42 },
+  { date: '2023-07', days: 48 },
+  { date: '2023-10', days: 52 },
+  { date: '2024-01', days: 49 },
+  { date: '2024-04', days: 45 },
+  { date: '2024-07', days: 42 },
+  { date: '2024-10', days: 38 },
+  { date: '2025-01', days: 35 },
+  { date: '2025-04', days: 32 },
 ];
 
 const SupplyDemandChart = () => {
