@@ -3,7 +3,7 @@ import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-// Real RBA cash rate data from www.rba.gov.au
+// Real RBA cash rate data from www.rba.gov.au (last 5 years)
 const rbaData = [
   { date: '2024-02', rate: 4.35 },
   { date: '2023-11', rate: 4.35 },
