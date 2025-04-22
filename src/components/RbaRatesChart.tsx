@@ -1,9 +1,8 @@
-
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-// Real RBA cash rate data from www.rba.gov.au (last 5 years)
+// Real RBA cash rate data from www.rba.gov.au (last 5 years from April 2024)
 const rbaData = [
   { date: '2024-02', rate: 4.35 },
   { date: '2023-11', rate: 4.35 },
@@ -25,8 +24,7 @@ const rbaData = [
   { date: '2020-03', rate: 0.25 },
   { date: '2019-10', rate: 0.75 },
   { date: '2019-07', rate: 1.00 },
-  { date: '2019-06', rate: 1.25 },
-  { date: '2019-04', rate: 1.50 }
+  { date: '2019-05', rate: 1.50 }
 ].reverse();
 
 const RbaRatesChart = () => {
@@ -83,4 +81,3 @@ const RbaRatesChart = () => {
 };
 
 export default RbaRatesChart;
-
