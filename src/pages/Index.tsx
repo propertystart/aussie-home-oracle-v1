@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AddressSearchForm from "@/components/AddressSearchForm";
 import PropertyResult, { PropertyValueData } from "@/components/PropertyResult";
 import RbaRatesChart from "@/components/RbaRatesChart";
+import SupplyDemandChart from "@/components/SupplyDemandChart";
 import { getPropertyValuation } from "@/services/propertyService";
 import { Building, DollarSign, Home, Search } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
@@ -52,9 +53,10 @@ const Index = () => {
       <div className="flex-grow bg-white py-8 px-4">
         <div className="container mx-auto">
           <Tabs defaultValue="property" className="w-full">
-            <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-8">
+            <TabsList className="grid w-full max-w-md mx-auto grid-cols-3 mb-8">
               <TabsTrigger value="property">Property Valuation</TabsTrigger>
               <TabsTrigger value="rba">RBA Interest Rates</TabsTrigger>
+              <TabsTrigger value="supply">Supply & Demand</TabsTrigger>
             </TabsList>
             
             <TabsContent value="property">
@@ -100,6 +102,10 @@ const Index = () => {
             
             <TabsContent value="rba">
               <RbaRatesChart />
+            </TabsContent>
+
+            <TabsContent value="supply">
+              <SupplyDemandChart />
             </TabsContent>
           </Tabs>
         </div>
