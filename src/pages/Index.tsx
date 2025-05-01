@@ -146,17 +146,67 @@ const Index = () => {
 
       <div className="flex-grow bg-white py-4 px-4">
         <div className="container mx-auto">
-          <Tabs defaultValue="rba" className="w-full">
+          <Tabs defaultValue="npv" className="w-full">
             <TabsList className="flex justify-between w-full max-w-4xl mx-auto mb-8">
+              <TabsTrigger value="npv">Net Present Value</TabsTrigger>
               <TabsTrigger value="rba">RBA Interest Rates</TabsTrigger>
               <TabsTrigger value="growth">Economic Growth</TabsTrigger>
               <TabsTrigger value="inflation">Inflation</TabsTrigger>
               <TabsTrigger value="demographics">Demographics</TabsTrigger>
               <TabsTrigger value="supply">Supply & Demand</TabsTrigger>
               <TabsTrigger value="price">Average House Price</TabsTrigger>
-              <TabsTrigger value="npv">Net Present Value</TabsTrigger>
             </TabsList>
             
+            <TabsContent value="npv">
+              <div className="max-w-md mx-auto mb-8">
+                <form onSubmit={handleNpvSubmit} className="space-y-4">
+                  <div className="space-y-3">
+                    <Input
+                      type="text"
+                      placeholder="Street Address"
+                      value={npvAddress}
+                      onChange={(e) => setNpvAddress(e.target.value)}
+                      className="w-full"
+                    />
+                    <Input
+                      type="text"
+                      placeholder="Suburb"
+                      value={npvSuburb}
+                      onChange={(e) => setNpvSuburb(e.target.value)}
+                      className="w-full"
+                    />
+                    <Input
+                      type="text"
+                      placeholder="Postcode"
+                      value={npvPostcode}
+                      onChange={(e) => setNpvPostcode(e.target.value)}
+                      className="w-full"
+                      maxLength={4}
+                    />
+                  </div>
+                  <div className="flex justify-end">
+                    <Button 
+                      type="submit" 
+                      disabled={isLoadingValueData}
+                      className="bg-aussie-blue hover:bg-blue-800"
+                    >
+                      {isLoadingValueData ? (
+                        <div className="flex items-center gap-2">
+                          <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          <span>Loading...</span>
+                        </div>
+                      ) : (
+                        "Calculate Value"
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              </div>
+              {showValueChart && valueData.length > 0 && (
+                <NetPresentValueChart data={valueData} />
+              )}
+            </TabsContent>
+
             <TabsContent value="rba">
               <RbaRatesChart />
             </TabsContent>
@@ -332,56 +382,6 @@ const Index = () => {
                 </form>
               </div>
               {showPriceChart && <HousePriceChart />}
-            </TabsContent>
-
-            <TabsContent value="npv">
-              <div className="max-w-md mx-auto mb-8">
-                <form onSubmit={handleNpvSubmit} className="space-y-4">
-                  <div className="space-y-3">
-                    <Input
-                      type="text"
-                      placeholder="Street Address"
-                      value={npvAddress}
-                      onChange={(e) => setNpvAddress(e.target.value)}
-                      className="w-full"
-                    />
-                    <Input
-                      type="text"
-                      placeholder="Suburb"
-                      value={npvSuburb}
-                      onChange={(e) => setNpvSuburb(e.target.value)}
-                      className="w-full"
-                    />
-                    <Input
-                      type="text"
-                      placeholder="Postcode"
-                      value={npvPostcode}
-                      onChange={(e) => setNpvPostcode(e.target.value)}
-                      className="w-full"
-                      maxLength={4}
-                    />
-                  </div>
-                  <div className="flex justify-end">
-                    <Button 
-                      type="submit" 
-                      disabled={isLoadingValueData}
-                      className="bg-aussie-blue hover:bg-blue-800"
-                    >
-                      {isLoadingValueData ? (
-                        <div className="flex items-center gap-2">
-                          <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          <span>Loading...</span>
-                        </div>
-                      ) : (
-                        "Calculate Value"
-                      )}
-                    </Button>
-                  </div>
-                </form>
-              </div>
-              {showValueChart && valueData.length > 0 && (
-                <NetPresentValueChart data={valueData} />
-              )}
             </TabsContent>
           </Tabs>
         </div>
