@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import RbaRatesChart from "@/components/RbaRatesChart";
 import SupplyDemandChart from "@/components/SupplyDemandChart";
@@ -5,10 +6,12 @@ import DemographicsChart from "@/components/DemographicsChart";
 import InflationChart from "@/components/InflationChart";
 import HousePriceChart from "@/components/HousePriceChart";
 import EconomicGrowthChart from "@/components/EconomicGrowthChart";
+import NetPresentValueChart from "@/components/NetPresentValueChart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { ValueDataPoint, getPropertyValueHistory, PropertyAddress } from "@/services/houseValueService";
 
 const Index = () => {
   const [supplyPostcode, setSupplyPostcode] = useState("");
@@ -19,6 +22,7 @@ const Index = () => {
   const [showPriceChart, setShowPriceChart] = useState(false);
   const { toast } = useToast();
 
+  // Property value states
   const [beds, setBeds] = useState("");
   const [baths, setBaths] = useState("");
   const [cars, setCars] = useState("");
@@ -30,6 +34,14 @@ const Index = () => {
   const [supplyCars, setSupplyCars] = useState("");
   const [supplyFloorArea, setSupplyFloorArea] = useState("");
   const [supplyLandArea, setSupplyLandArea] = useState("");
+
+  // Net Present Value states
+  const [npvAddress, setNpvAddress] = useState("");
+  const [npvSuburb, setNpvSuburb] = useState("");
+  const [npvPostcode, setNpvPostcode] = useState("");
+  const [valueData, setValueData] = useState<ValueDataPoint[]>([]);
+  const [isLoadingValueData, setIsLoadingValueData] = useState(false);
+  const [showValueChart, setShowValueChart] = useState(false);
 
   const validatePostcode = (postcode: string) => {
     return /^\d{4}$/.test(postcode);
@@ -74,6 +86,48 @@ const Index = () => {
     setShowPriceChart(true);
   };
 
+  const handleNpvSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validatePostcode(npvPostcode)) {
+      toast({
+        title: "Invalid Postcode",
+        description: "Please enter a valid 4-digit Australian postcode",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!npvAddress.trim() || !npvSuburb.trim()) {
+      toast({
+        title: "Missing Information",
+        description: "Please enter both address and suburb",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoadingValueData(true);
+    try {
+      const propertyData: PropertyAddress = {
+        address: npvAddress,
+        suburb: npvSuburb,
+        postcode: npvPostcode
+      };
+      
+      const data = await getPropertyValueHistory(propertyData);
+      setValueData(data);
+      setShowValueChart(true);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to fetch property value history",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoadingValueData(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <div className="hero-pattern py-6 px-4 md:py-8">
@@ -93,13 +147,14 @@ const Index = () => {
       <div className="flex-grow bg-white py-4 px-4">
         <div className="container mx-auto">
           <Tabs defaultValue="rba" className="w-full">
-            <TabsList className="grid w-full max-w-4xl mx-auto grid-cols-6 gap-4 mb-8">
+            <TabsList className="grid w-full max-w-4xl mx-auto grid-cols-7 gap-4 mb-8">
               <TabsTrigger value="rba" className="flex-1">RBA Interest Rates</TabsTrigger>
               <TabsTrigger value="growth" className="flex-1">Economic Growth</TabsTrigger>
               <TabsTrigger value="inflation" className="flex-1">Inflation</TabsTrigger>
               <TabsTrigger value="demographics" className="flex-1">Demographics</TabsTrigger>
               <TabsTrigger value="supply" className="flex-1">Supply & Demand</TabsTrigger>
               <TabsTrigger value="price" className="flex-1">Average House Price</TabsTrigger>
+              <TabsTrigger value="npv" className="flex-1">Net Present Value</TabsTrigger>
             </TabsList>
             
             <TabsContent value="rba">
@@ -277,6 +332,56 @@ const Index = () => {
                 </form>
               </div>
               {showPriceChart && <HousePriceChart />}
+            </TabsContent>
+
+            <TabsContent value="npv">
+              <div className="max-w-md mx-auto mb-8">
+                <form onSubmit={handleNpvSubmit} className="space-y-4">
+                  <div className="space-y-3">
+                    <Input
+                      type="text"
+                      placeholder="Street Address"
+                      value={npvAddress}
+                      onChange={(e) => setNpvAddress(e.target.value)}
+                      className="w-full"
+                    />
+                    <Input
+                      type="text"
+                      placeholder="Suburb"
+                      value={npvSuburb}
+                      onChange={(e) => setNpvSuburb(e.target.value)}
+                      className="w-full"
+                    />
+                    <Input
+                      type="text"
+                      placeholder="Postcode"
+                      value={npvPostcode}
+                      onChange={(e) => setNpvPostcode(e.target.value)}
+                      className="w-full"
+                      maxLength={4}
+                    />
+                  </div>
+                  <div className="flex justify-end">
+                    <Button 
+                      type="submit" 
+                      disabled={isLoadingValueData}
+                      className="bg-aussie-blue hover:bg-blue-800"
+                    >
+                      {isLoadingValueData ? (
+                        <div className="flex items-center gap-2">
+                          <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          <span>Loading...</span>
+                        </div>
+                      ) : (
+                        "Calculate Value"
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              </div>
+              {showValueChart && valueData.length > 0 && (
+                <NetPresentValueChart data={valueData} />
+              )}
             </TabsContent>
           </Tabs>
         </div>
