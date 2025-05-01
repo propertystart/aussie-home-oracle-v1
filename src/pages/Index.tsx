@@ -147,14 +147,14 @@ const Index = () => {
       <div className="flex-grow bg-white py-4 px-4">
         <div className="container mx-auto">
           <Tabs defaultValue="rba" className="w-full">
-            <TabsList className="grid w-full max-w-4xl mx-auto grid-cols-7 gap-4 mb-8">
-              <TabsTrigger value="rba" className="flex-1">RBA Interest Rates</TabsTrigger>
-              <TabsTrigger value="growth" className="flex-1">Economic Growth</TabsTrigger>
-              <TabsTrigger value="inflation" className="flex-1">Inflation</TabsTrigger>
-              <TabsTrigger value="demographics" className="flex-1">Demographics</TabsTrigger>
-              <TabsTrigger value="supply" className="flex-1">Supply & Demand</TabsTrigger>
-              <TabsTrigger value="price" className="flex-1">Average House Price</TabsTrigger>
-              <TabsTrigger value="npv" className="flex-1">Net Present Value</TabsTrigger>
+            <TabsList className="flex justify-between w-full max-w-4xl mx-auto mb-8">
+              <TabsTrigger value="rba">RBA Interest Rates</TabsTrigger>
+              <TabsTrigger value="growth">Economic Growth</TabsTrigger>
+              <TabsTrigger value="inflation">Inflation</TabsTrigger>
+              <TabsTrigger value="demographics">Demographics</TabsTrigger>
+              <TabsTrigger value="supply">Supply & Demand</TabsTrigger>
+              <TabsTrigger value="price">Average House Price</TabsTrigger>
+              <TabsTrigger value="npv">Net Present Value</TabsTrigger>
             </TabsList>
             
             <TabsContent value="rba">
