@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import RbaRatesChart from "@/components/RbaRatesChart";
 import SupplyDemandChart from "@/components/SupplyDemandChart";
@@ -12,6 +11,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { ValueDataPoint, getPropertyValueHistory, PropertyAddress } from "@/services/houseValueService";
+import { 
+  ViewComAuProperty, 
+  getPropertyDataFromViewComAu,
+  convertToValueDataPoints 
+} from "@/services/viewComAuService";
 
 const Index = () => {
   const [supplyPostcode, setSupplyPostcode] = useState("");
@@ -40,8 +44,10 @@ const Index = () => {
   const [npvSuburb, setNpvSuburb] = useState("");
   const [npvPostcode, setNpvPostcode] = useState("");
   const [valueData, setValueData] = useState<ValueDataPoint[]>([]);
+  const [viewComAuData, setViewComAuData] = useState<ViewComAuProperty | null>(null);
   const [isLoadingValueData, setIsLoadingValueData] = useState(false);
   const [showValueChart, setShowValueChart] = useState(false);
+  const [dataSource, setDataSource] = useState<"default" | "viewcomau">("default");
 
   const validatePostcode = (postcode: string) => {
     return /^\d{4}$/.test(postcode);
@@ -114,9 +120,33 @@ const Index = () => {
         postcode: npvPostcode
       };
       
-      const data = await getPropertyValueHistory(propertyData);
-      setValueData(data);
-      setShowValueChart(true);
+      // Determine which data source to use
+      if (dataSource === "viewcomau") {
+        // Fetch data from View.com.au
+        const viewData = await getPropertyDataFromViewComAu(propertyData);
+        if (viewData) {
+          setViewComAuData(viewData);
+          const formattedData = convertToValueDataPoints(viewData);
+          setValueData(formattedData);
+          setShowValueChart(true);
+          toast({
+            title: "Success",
+            description: "Property data fetched from View.com.au",
+          });
+        } else {
+          toast({
+            title: "Error",
+            description: "Property not found on View.com.au",
+            variant: "destructive",
+          });
+        }
+      } else {
+        // Use default data source
+        setViewComAuData(null);
+        const data = await getPropertyValueHistory(propertyData);
+        setValueData(data);
+        setShowValueChart(true);
+      }
     } catch (error) {
       toast({
         title: "Error",
@@ -183,6 +213,31 @@ const Index = () => {
                       className="w-full"
                       maxLength={4}
                     />
+                    <div className="flex items-center space-x-2 py-2">
+                      <label className="text-sm font-medium">Data Source:</label>
+                      <div className="flex gap-4">
+                        <label className="flex items-center gap-1.5">
+                          <input
+                            type="radio"
+                            name="dataSource"
+                            checked={dataSource === "default"}
+                            onChange={() => setDataSource("default")}
+                            className="h-4 w-4 text-aussie-blue"
+                          />
+                          <span className="text-sm">Default</span>
+                        </label>
+                        <label className="flex items-center gap-1.5">
+                          <input
+                            type="radio"
+                            name="dataSource"
+                            checked={dataSource === "viewcomau"}
+                            onChange={() => setDataSource("viewcomau")}
+                            className="h-4 w-4 text-aussie-blue"
+                          />
+                          <span className="text-sm">View.com.au</span>
+                        </label>
+                      </div>
+                    </div>
                   </div>
                   <div className="flex justify-end">
                     <Button 
@@ -203,7 +258,10 @@ const Index = () => {
                 </form>
               </div>
               {showValueChart && valueData.length > 0 && (
-                <NetPresentValueChart data={valueData} />
+                <NetPresentValueChart 
+                  data={valueData} 
+                  viewComAuData={viewComAuData || undefined} 
+                />
               )}
             </TabsContent>
 
